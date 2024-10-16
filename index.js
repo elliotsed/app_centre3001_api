@@ -13,8 +13,4 @@ app.use(cors({
 }))
 dotenv.config({path: "./config/.env"})
 
-app.use("/contactCentre3001", Router)
-
-app.listen(process.env.PORT, () => {
-    console.log("App is Running")
-})
+app.use("/gestion_contact", Router)

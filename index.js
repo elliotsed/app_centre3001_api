@@ -7,7 +7,7 @@ import { Router } from './routes/routes.js'
 const app = express()
 app.use(express.json())
 app.use(cors({
-    origin: ["https://contact-centre3001.vercel.app", "*"],
+    origin: ["https://contact-centre3001.vercel.app"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
 }))

@@ -48,6 +48,9 @@ const ContactSchema = new mongoose.Schema({
     birthday: {
         type: String,
     },
+    comment: {
+        type: String,
+    },
     businessName: {
         type: String,
         required: function() { return this.contactType === 'business'; }

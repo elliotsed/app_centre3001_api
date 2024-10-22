@@ -2,7 +2,7 @@ import express from 'express'
 import { ContactModel } from '../models/Contact.js'
 
 const createContact = async (req, res) => {
-    const { contactType, first_name, last_name, email, phone, address, country, postalCode, municipality, province, website, skype, birthday, businessName, paymentMethod } = req.body;
+    const { contactType, first_name, last_name, email, phone, address, country, postalCode, municipality, province, website, skype, birthday, comment, businessName, paymentMethod } = req.body;
 
     try {
         const newContact = new ContactModel({
@@ -19,6 +19,7 @@ const createContact = async (req, res) => {
             website,
             skype,
             birthday,
+            comment,
             businessName,
             paymentMethod,
             postedBy: req.user._id

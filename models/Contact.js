@@ -8,21 +8,20 @@ const ContactSchema = new mongoose.Schema({
     },
     last_name: {
         type: String,
-        require: true
     },
     first_name: {
         type: String,
-        require: true
     },
     email: {
         type: String,
-        require: true,
-        unique: true
+        sparse: true,
+        index: {
+            unique: true,
+            partialFilterExpression: { email: { $type: "string", $ne: "" } }
+        }
     },
     phone: {
         type: String,
-        require: true,
-        unique: true
     },
     address: {
         type: String,
@@ -53,11 +52,9 @@ const ContactSchema = new mongoose.Schema({
     },
     businessName: {
         type: String,
-        required: function() { return this.contactType === 'business'; }
     },
     paymentMethod: {
         type: String,
-        required: function() { return this.contactType === 'business'; }
     },
     postedBy: {
         type: mongoose.Schema.Types.ObjectId,
@@ -68,4 +65,4 @@ const ContactSchema = new mongoose.Schema({
 })
 
 const ContactModel = mongoose.model("contacts", ContactSchema)
-export {ContactModel}
+export { ContactModel }

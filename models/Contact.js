@@ -8,9 +8,11 @@ const ContactSchema = new mongoose.Schema({
     },
     last_name: {
         type: String,
+        required: true
     },
     first_name: {
         type: String,
+        required: true
     },
     email: {
         type: String,

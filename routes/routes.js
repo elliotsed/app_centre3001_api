@@ -3,7 +3,7 @@ import { Register, Login, Auth } from '../controller/userController.js'
 import { body } from 'express-validator'
 import { VerifyUser } from '../middleware/VerifyUser.js'
 import { createContact, getContacts, getContact, updateContact, deleteContact } from '../controller/contactController.js'
-
+import { getInvoices,getInvoice,deleteInvoice,updateInvoice,createInvoice } from '../controller/invoiceController.js'
 const router = express.Router()
 
 
@@ -31,5 +31,13 @@ router.get("/contacts", VerifyUser, getContacts)
 router.get("/contacts/:id", VerifyUser, getContact)
 router.put("/update-contact/:id", VerifyUser, updateContact)
 router.delete("/contact/:id", VerifyUser, deleteContact)
+
+
+// Invoices Routes 
+router.get("/invoices", VerifyUser, getInvoices)
+router.get("/invoices/:id", VerifyUser, getInvoice)
+router.post("/invoices", VerifyUser, createInvoice)
+router.put("/invoices/:id", VerifyUser, updateInvoice)
+router.delete("/invoices/:id", VerifyUser, deleteInvoice)
 
 export { router as Router }

@@ -1,22 +1,22 @@
 import mongoose from 'mongoose';
 
 const InvoiceSchema = new mongoose.Schema({
-    invoiceNumber: { // Numéro de facture
+    invoiceNumber: {
         type: String,
         unique: true,
     },
-    issueDate: { // Date de facturation
+    issueDate: { 
         type: Date,
         required: true,
-        default: Date.now, // Default to current date
+        default: Date.now, 
     },
-    orderRef: { // Référence de commande
+    orderRef: { 
         type: String,
     },
-    orderDate: { // Date de commande
+    orderDate: { 
         type: Date,
     },
-    deliveryAddress: { // Livraison Address
+    deliveryAddress: { 
         name: { type: String, required: true },
         address: { type: String, required: true },
         city: { type: String, required: true },
@@ -26,23 +26,23 @@ const InvoiceSchema = new mongoose.Schema({
     },
     products: [
         {
-            reference: { // Référence
+            reference: { 
                 type: String,
                 required: true,
             },
-            name: { // Nom du produit
+            name: { 
                 type: String,
                 required: true,
             },
-            taxRateOne: { // Taux de taxe
+            taxRateOne: { 
                 type: Number,
                 required: true,
             },
-            taxRateTwo: { // Taux de taxe
+            taxRateTwo: { 
                 type: Number,
                 required: true,
             },
-            unitPriceExclTax: { // Prix unitaire (HT)
+            unitPriceExclTax: { // Prix unitair
                 type: Number,
                 required: true,
             },
@@ -78,8 +78,8 @@ const InvoiceSchema = new mongoose.Schema({
     totalInclTax: { // Total (TTC)
         type: Number,
         required: true,
-    },
-    createdBy: { // The user who created this invoice
+    },// Taux de taxe
+    createdBy: { 
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true,
@@ -88,7 +88,6 @@ const InvoiceSchema = new mongoose.Schema({
     timestamps: true,
 });
 
-// Pre-save middleware to ensure the invoice number is generated before saving
 InvoiceSchema.pre('save', async function (next) {
     if (!this.invoiceNumber) {
         try {
@@ -99,16 +98,15 @@ InvoiceSchema.pre('save', async function (next) {
 
             const lastInvoiceNumber = lastInvoice
                 ? parseInt(lastInvoice.invoiceNumber.replace('CA', ''), 10)
-                : 0;
+                : 4999; // Default starting number set to 5000
 
             // Generate a new invoice number
             this.invoiceNumber = `CA${String(lastInvoiceNumber + 1).padStart(6, '0')}`;
         } catch (error) {
-            next(error); // Pass the error to the next middleware
+            return next(new Error(`Error generating invoice number: ${error.message}`));
         }
     }
 
-    // Automatically set issueDate to current date if not provided
     if (!this.issueDate) {
         this.issueDate = new Date();
     }

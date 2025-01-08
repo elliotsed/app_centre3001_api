@@ -5,7 +5,7 @@ import { errorResponse, successResponse, validateInvoiceData, calculateInvoiceTo
 const createInvoice = async (req, res) => {
     let {
         orderRef, orderDate,
-        products, carrierName, shippingFees, paymentMethod,
+        products, carrierName, shippingFees, paymentMethod,deliveryAddress
     } = req.body;
 
     // Validate input
@@ -19,13 +19,13 @@ const createInvoice = async (req, res) => {
         const { totalProductsExclTax, totalTax, totalInclTax, productsFinal } = calculateInvoiceTotals(products);
      
         products = productsFinal
-        console.log("calculated value", products)
         const newInvoice = new InvoiceModel({
             orderRef,
             orderDate,
             products,
             carrierName,
             shippingFees,
+            deliveryAddress,
             paymentMethod,
             totalProductsExclTax,
             totalTax,

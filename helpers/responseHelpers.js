@@ -23,7 +23,7 @@ export const validateInvoiceData = (data) => {
         { name: 'orderDate', type: 'string' },  // Date type (should be a valid Date object)
         { name: 'products', type: 'object' },  // Array of products
         { name: 'carrierName', type: 'string' },
-        { name: 'shippingFees', type: 'number' },
+        // { name: 'shippingFees', type: 'string' },
         { name: 'paymentMethod', type: 'string' }
     ];
 
@@ -38,12 +38,12 @@ export const validateInvoiceData = (data) => {
             return `Invalid type for field ${name}. Expected ${type}, got ${typeof data[name]}.`;
         }
 
-        // Specific validation for numerical fields (shippingFees, totalProductsExclTax, totalTax, totalInclTax)
-        if (['shippingFees'].includes(name)) {
-            if (data[name] < 0) {
-                return `${name} must be a positive number.`;
-            }
-        }
+        // // Specific validation for numerical fields (shippingFees, totalProductsExclTax, totalTax, totalInclTax)
+        // if (['shippingFees'].includes(name)) {
+        //     if (data[name] < 0) {
+        //         return `${name} must be a positive number.`;
+        //     }
+        // }
 
         // Validate products field (ensure it's an array and contains the necessary fields)
         if (name === 'products') {
@@ -60,9 +60,9 @@ export const validateInvoiceData = (data) => {
                     }
 
                     // Ensure correct type for each product field
-                    if (typeof product[field] !== 'number' && field !== 'reference' && field !== 'name') {
-                        return `Invalid type for "${field}". Expected number, got ${typeof product[field]}.`;
-                    }
+                    // if (typeof product[field] !== 'number' && field !== 'reference' && field !== 'name') {
+                    //     return `Invalid type for "${field}". Expected number, got ${typeof product[field]}.`;
+                    // }
                 }
             }
         }

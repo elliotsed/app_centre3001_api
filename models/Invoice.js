@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+
 const InvoiceSchema = new mongoose.Schema({
     invoiceNumber: { // Numéro de facture
         type: String,
@@ -14,6 +15,14 @@ const InvoiceSchema = new mongoose.Schema({
     },
     orderDate: { // Date de commande
         type: Date,
+    },
+    deliveryAddress: { // Livraison Address
+        name: { type: String, required: true },
+        address: { type: String, required: true },
+        city: { type: String, required: true },
+        province: { type: String, required: true },
+        postalCode: { type: String, required: true },
+        country: { type: String, required: true },
     },
     products: [
         {
@@ -79,21 +88,24 @@ const InvoiceSchema = new mongoose.Schema({
     timestamps: true,
 });
 
-// Ensure that the pre-save middleware is registered before the model creation
+// Pre-save middleware to ensure the invoice number is generated before saving
 InvoiceSchema.pre('save', async function (next) {
-    // Generate invoiceNumber if not provided
-    console.log("i am here ")
     if (!this.invoiceNumber) {
-        const lastInvoice = await mongoose
-            .model('Invoice')
-            .findOne()
-            .sort({ createdAt: -1 }); // Get the most recent invoice
+        try {
+            const lastInvoice = await mongoose
+                .model('Invoice')
+                .findOne()
+                .sort({ createdAt: -1 }); // Get the most recent invoice
 
-        const lastInvoiceNumber = lastInvoice
-            ? parseInt(lastInvoice.invoiceNumber.replace('CA', ''), 10)
-            : 0;
+            const lastInvoiceNumber = lastInvoice
+                ? parseInt(lastInvoice.invoiceNumber.replace('CA', ''), 10)
+                : 0;
 
-        this.invoiceNumber = `CA${String(lastInvoiceNumber + 1).padStart(6, '0')}`;
+            // Generate a new invoice number
+            this.invoiceNumber = `CA${String(lastInvoiceNumber + 1).padStart(6, '0')}`;
+        } catch (error) {
+            next(error); // Pass the error to the next middleware
+        }
     }
 
     // Automatically set issueDate to current date if not provided
@@ -101,7 +113,7 @@ InvoiceSchema.pre('save', async function (next) {
         this.issueDate = new Date();
     }
 
-    next();
+    next(); // Continue with the save operation
 });
 
 const InvoiceModel = mongoose.model('Invoice', InvoiceSchema);

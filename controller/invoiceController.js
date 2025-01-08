@@ -15,7 +15,7 @@ const createInvoice = async (req, res) => {
     }
 
     try {
-        // Calculate the totals using the helper function
+     
         const { totalProductsExclTax, totalTax, totalInclTax, productsFinal } = calculateInvoiceTotals(products);
      
         products = productsFinal
@@ -76,14 +76,35 @@ const updateInvoice = async (req, res) => {
     if (!id) {
         return errorResponse(res, 'No ID specified', 400);
     }
+    let {
+        orderRef, orderDate,
+        products, carrierName, shippingFees, paymentMethod, deliveryAddress
+    } = req.body;
 
     const validationError = validateInvoiceData(req.body);
+
     if (validationError) {
         return errorResponse(res, validationError, 400);
     }
 
+    const { totalProductsExclTax, totalTax, totalInclTax, productsFinal } = calculateInvoiceTotals(products);
+
+    products = productsFinal
+
     try {
-        const result = await InvoiceModel.findByIdAndUpdate(id, req.body, { new: true });
+        const result = await InvoiceModel.findByIdAndUpdate(id,{
+            orderRef,
+            orderDate,
+            products,
+            carrierName,
+            shippingFees,
+            deliveryAddress,
+            paymentMethod,
+            totalProductsExclTax,
+            totalTax,
+            totalInclTax,
+            createdBy: req.user._id,
+        }, { new: true });
         if (!result) {
             return errorResponse(res, 'Invoice not found', 404);
         }

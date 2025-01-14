@@ -14,7 +14,6 @@ export const VerifyUser = (req, res, next) => {
                 }
               
                 const user = await UserModel.findOne({ _id: payload._id }).select("-password")
-                console.log("recouvre", user)
                 req.user = user;
                 next()
             } catch (err) {

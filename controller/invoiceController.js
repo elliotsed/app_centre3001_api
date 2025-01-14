@@ -1,11 +1,11 @@
 import express from 'express';
-import { InvoiceModel  } from '../models/Invoice.js';
+import { InvoiceModel } from '../models/Invoice.js';
 import { errorResponse, successResponse, validateInvoiceData, calculateInvoiceTotals } from '../helpers/responseHelpers.js';
 
 const createInvoice = async (req, res) => {
     let {
         orderRef, orderDate,
-        products, carrierName, shippingFees, paymentMethod,deliveryAddress
+        products, carrierName, shippingFees, paymentMethod, deliveryAddress, billingAddress
     } = req.body;
 
     // Validate input
@@ -15,10 +15,11 @@ const createInvoice = async (req, res) => {
     }
 
     try {
-     
-        const { totalProductsExclTax, totalTax, totalInclTax, productsFinal } = calculateInvoiceTotals(products);
-     
+
+        const { totalProductsExclTax, totalTax, totalInclTax, productsFinal } = calculateInvoiceTotals(products,shippingFees);
+
         products = productsFinal
+        console.log("vocii")
         const newInvoice = new InvoiceModel({
             orderRef,
             orderDate,
@@ -26,6 +27,7 @@ const createInvoice = async (req, res) => {
             carrierName,
             shippingFees,
             deliveryAddress,
+            billingAddress,
             paymentMethod,
             totalProductsExclTax,
             totalTax,
@@ -43,7 +45,7 @@ const createInvoice = async (req, res) => {
 };
 
 const getInvoices = async (req, res) => {
-   
+
     try {
         const invoices = await InvoiceModel.find({ createdBy: req.user._id });
         return successResponse(res, invoices, 'Invoices retrieved successfully');
@@ -66,7 +68,7 @@ const getInvoice = async (req, res) => {
         }
         return successResponse(res, invoice, 'Invoice retrieved successfully');
     } catch (err) {
-    
+
         return errorResponse(res, err.message);
     }
 };
@@ -78,7 +80,7 @@ const updateInvoice = async (req, res) => {
     }
     let {
         orderRef, orderDate,
-        products, carrierName, shippingFees, paymentMethod, deliveryAddress
+        products, carrierName, shippingFees, paymentMethod, deliveryAddress,billingAddress
     } = req.body;
 
     const validationError = validateInvoiceData(req.body);
@@ -87,18 +89,19 @@ const updateInvoice = async (req, res) => {
         return errorResponse(res, validationError, 400);
     }
 
-    const { totalProductsExclTax, totalTax, totalInclTax, productsFinal } = calculateInvoiceTotals(products);
+    const { totalProductsExclTax, totalTax, totalInclTax, productsFinal } = calculateInvoiceTotals(products,shippingFees);
 
     products = productsFinal
 
     try {
-        const result = await InvoiceModel.findByIdAndUpdate(id,{
+        const result = await InvoiceModel.findByIdAndUpdate(id, {
             orderRef,
             orderDate,
             products,
             carrierName,
             shippingFees,
             deliveryAddress,
+            billingAddress,
             paymentMethod,
             totalProductsExclTax,
             totalTax,

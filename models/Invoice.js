@@ -18,11 +18,19 @@ const InvoiceSchema = new mongoose.Schema({
     },
     deliveryAddress: { 
         name: { type: String, required: true },
-        address: { type: String, required: true },
-        city: { type: String, required: true },
-        province: { type: String, required: true },
-        postalCode: { type: String, required: true },
-        country: { type: String, required: true },
+        doorNumberStreet: { type: String, required: true },
+        provinceCountry: { type: String, required: true },
+        municipalityPostalCode: { type: String, required: true },
+        extraInfo: { type: String },
+        telephone: { type: Number, required: true },
+    },
+    billingAddress: {
+        name: { type: String, required: true },
+        doorNumberStreet: { type: String, required: true },
+        provinceCountry: { type: String, required: true },
+        municipalityPostalCode: { type: String, required: true },
+        extraInfo: { type: String },
+        telephone: { type: Number, required: true },
     },
     products: [
         {
@@ -59,7 +67,7 @@ const InvoiceSchema = new mongoose.Schema({
     carrierName: { // Nom du transporteur
         type: String,
     },
-    shippingFees: { // Frais de livraison
+    shippingFees: { 
         type: Number,
         default: 0,
     },
@@ -94,11 +102,11 @@ InvoiceSchema.pre('save', async function (next) {
             const lastInvoice = await mongoose
                 .model('Invoice')
                 .findOne()
-                .sort({ createdAt: -1 }); // Get the most recent invoice
+                .sort({ createdAt: -1 }); 
 
             const lastInvoiceNumber = lastInvoice
                 ? parseInt(lastInvoice.invoiceNumber.replace('CA', ''), 10)
-                : 4999; // Default starting number set to 5000
+                : 4999; 
 
             // Generate a new invoice number
             this.invoiceNumber = `CA${String(lastInvoiceNumber + 1).padStart(6, '0')}`;

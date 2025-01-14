@@ -20,8 +20,8 @@ export const errorResponse = (res, message = 'Something went wrong', statusCode 
 export const validateInvoiceData = (data) => {
     const requiredFields = [
         { name: 'orderRef', type: 'string' },
-        { name: 'orderDate', type: 'string' },  // Date type (should be a valid Date object)
-        { name: 'products', type: 'object' },  // Array of products
+        { name: 'orderDate', type: 'string' },  
+        { name: 'products', type: 'object' },  
         { name: 'carrierName', type: 'string' },
         // { name: 'shippingFees', type: 'string' },
         { name: 'paymentMethod', type: 'string' }
@@ -73,7 +73,7 @@ export const validateInvoiceData = (data) => {
 
 
 // Helper function to calculate totals
-export const calculateInvoiceTotals = (products) => {
+export const calculateInvoiceTotals = (products, shippingFees=0) => {
     let totalProductsExclTax = 0;
     let totalTax = 0;
 
@@ -83,18 +83,14 @@ export const calculateInvoiceTotals = (products) => {
         
         product.totalExclTax = product.unitPriceExclTax * product.quantity;
         totalProductsExclTax += product.totalExclTax
-        // Calculate tax for each product and add to totalTax
         const taxAmount = ((product.unitPriceExclTax * product.quantity) * product.taxRateOne / 100) + ((product.unitPriceExclTax * product.quantity) * product.taxRateTwo / 100);
         totalTax += taxAmount;
         return product
     });
 
     totalTax = roundToTwoDecimals(totalTax)
-    
-    let totalInclTax = totalProductsExclTax + totalTax;
+    let totalInclTax = totalProductsExclTax + totalTax + Number(shippingFees);
     totalInclTax = roundToTwoDecimals(totalInclTax)
-
-    console.log("totalInclTax", roundToTwoDecimals(totalInclTax));
 
     return {
         totalProductsExclTax,

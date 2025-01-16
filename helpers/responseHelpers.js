@@ -88,8 +88,7 @@ export const calculateInvoiceTotals = (products, shippingFees=0) => {
     });
 
     totalTax = roundToTwoDecimals(totalTax)
-    totalProductsExclTax = totalProductsExclTax + Number(shippingFees);
-    let totalInclTax = totalProductsExclTax + totalTax;
+    let totalInclTax = totalProductsExclTax + totalTax + Number(shippingFees);
     totalInclTax = roundToTwoDecimals(totalInclTax)
 
     return {

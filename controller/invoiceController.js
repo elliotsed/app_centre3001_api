@@ -5,7 +5,7 @@ import { errorResponse, successResponse, validateInvoiceData, calculateInvoiceTo
 const createInvoice = async (req, res) => {
     let {
         orderRef, orderDate,
-        products, carrierName, shippingFees, paymentMethod, deliveryAddress, billingAddress
+        products, carrierName, shippingFees, paymentMethod, deliveryAddress, billingAddress, taxRateOne, taxRateTwo
     } = req.body;
 
     // Validate input
@@ -16,7 +16,7 @@ const createInvoice = async (req, res) => {
 
     try {
 
-        const { totalProductsExclTax, totalTax, totalInclTax, productsFinal } = calculateInvoiceTotals(products,shippingFees);
+        const { totalProductsExclTax, totalTax, totalInclTax, totalsExclTax, productsFinal } = calculateInvoiceTotals(products, shippingFees, taxRateOne, taxRateTwo);
 
         products = productsFinal
         console.log("vocii")
@@ -31,6 +31,9 @@ const createInvoice = async (req, res) => {
             paymentMethod,
             totalProductsExclTax,
             totalTax,
+            taxRateOne,
+            taxRateTwo,
+            totalsExclTax,
             totalInclTax,
             createdBy: req.user._id,
         });
@@ -80,7 +83,7 @@ const updateInvoice = async (req, res) => {
     }
     let {
         orderRef, orderDate,
-        products, carrierName, shippingFees, paymentMethod, deliveryAddress,billingAddress
+        products, carrierName, shippingFees, paymentMethod, deliveryAddress, billingAddress, taxRateOne, taxRateTwo
     } = req.body;
 
     const validationError = validateInvoiceData(req.body);
@@ -89,7 +92,7 @@ const updateInvoice = async (req, res) => {
         return errorResponse(res, validationError, 400);
     }
 
-    const { totalProductsExclTax, totalTax, totalInclTax, productsFinal } = calculateInvoiceTotals(products,shippingFees);
+    const { totalProductsExclTax, totalTax, totalInclTax, totalsExclTax, productsFinal } = calculateInvoiceTotals(products, shippingFees, taxRateOne, taxRateTwo);
 
     products = productsFinal
 
@@ -105,6 +108,9 @@ const updateInvoice = async (req, res) => {
             paymentMethod,
             totalProductsExclTax,
             totalTax,
+            taxRateOne,
+            taxRateTwo,
+            totalsExclTax,
             totalInclTax,
             createdBy: req.user._id,
         }, { new: true });

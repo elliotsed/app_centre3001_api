@@ -42,14 +42,6 @@ const InvoiceSchema = new mongoose.Schema({
                 type: String,
                 required: true,
             },
-            taxRateOne: { 
-                type: Number,
-                required: true,
-            },
-            taxRateTwo: { 
-                type: Number,
-                required: true,
-            },
             unitPriceExclTax: { // Prix unitair
                 type: Number,
                 required: true,
@@ -64,6 +56,14 @@ const InvoiceSchema = new mongoose.Schema({
             },
         },
     ],
+    taxRateOne: {
+        type: Number,
+        required: true,
+    },
+    taxRateTwo: {
+        type: Number,
+        required: true,
+    },
     carrierName: { // Nom du transporteur
         type: String,
     },
@@ -82,6 +82,11 @@ const InvoiceSchema = new mongoose.Schema({
     totalTax: { // Total des taxes
         type: Number,
         required: true,
+    },
+    totalsExclTax:{
+        type: Number,
+        required: true,
+
     },
     totalInclTax: { // Total (TTC)
         type: Number,

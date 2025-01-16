@@ -53,7 +53,7 @@ export const validateInvoiceData = (data) => {
 
             // Validate each product within the products array
             for (let product of data[name]) {
-                const productFields = ['reference', 'name', 'taxRateOne', 'taxRateTwo', 'unitPriceExclTax', 'quantity'];
+                const productFields = ['reference', 'name', 'unitPriceExclTax', 'quantity'];
                 for (let field of productFields) {
                     if (!product[field]) {
                         return `Missing field "${field}" in product.`;
@@ -73,7 +73,7 @@ export const validateInvoiceData = (data) => {
 
 
 
-export const calculateInvoiceTotals = (products, shippingFees=0) => {
+export const calculateInvoiceTotals = (products, shippingFees=0,taxRateOne, taxRateTwo) => {
     let totalProductsExclTax = 0;
     let totalTax = 0;
 
@@ -82,19 +82,20 @@ export const calculateInvoiceTotals = (products, shippingFees=0) => {
         
         product.totalExclTax = product.unitPriceExclTax * product.quantity;
         totalProductsExclTax += product.totalExclTax
-        const taxAmount = ((product.unitPriceExclTax * product.quantity) * product.taxRateOne / 100) + ((product.unitPriceExclTax * product.quantity) * product.taxRateTwo / 100);
-        totalTax += taxAmount;
         return product
     });
-
-    totalTax = roundToTwoDecimals(totalTax)
-    let totalInclTax = totalProductsExclTax + totalTax + Number(shippingFees);
+    
+    const totalsExclTax = (totalProductsExclTax + Number(shippingFees))
+    totalTax = (totalsExclTax * (taxRateOne/100)) + (totalsExclTax * (taxRateTwo/100))
+    totalTax = roundToTwoDecimals(totalTax) 
+    let totalInclTax = totalsExclTax + totalTax ;
     totalInclTax = roundToTwoDecimals(totalInclTax)
 
     return {
         totalProductsExclTax,
         totalTax,
         totalInclTax,
+        totalsExclTax,
         productsFinal
     };
 };

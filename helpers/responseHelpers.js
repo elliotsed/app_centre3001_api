@@ -72,12 +72,11 @@ export const validateInvoiceData = (data) => {
 };
 
 
-// Helper function to calculate totals
+
 export const calculateInvoiceTotals = (products, shippingFees=0) => {
     let totalProductsExclTax = 0;
     let totalTax = 0;
 
-    // Calculate total excluding tax and total tax
   
     const productsFinal = products.map(product => {
         
@@ -89,7 +88,8 @@ export const calculateInvoiceTotals = (products, shippingFees=0) => {
     });
 
     totalTax = roundToTwoDecimals(totalTax)
-    let totalInclTax = totalProductsExclTax + totalTax + Number(shippingFees);
+    totalProductsExclTax = totalProductsExclTax + Number(shippingFees);
+    let totalInclTax = totalProductsExclTax + totalTax;
     totalInclTax = roundToTwoDecimals(totalInclTax)
 
     return {

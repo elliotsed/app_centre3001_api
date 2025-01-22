@@ -85,11 +85,13 @@ export const calculateInvoiceTotals = (products, shippingFees=0,taxRateOne, taxR
         return product
     });
     
-    const totalsExclTax = (totalProductsExclTax + Number(shippingFees))
+    totalProductsExclTax = totalProductsExclTax.toFixed(2)
+    const totalsExclTax = (Number(totalProductsExclTax) + Number(shippingFees)).toFixed(2)
     totalTax = (totalsExclTax * (taxRateOne/100)) + (totalsExclTax * (taxRateTwo/100))
-    totalTax = roundToTwoDecimals(totalTax) 
-    let totalInclTax = totalsExclTax + totalTax ;
-    totalInclTax = roundToTwoDecimals(totalInclTax)
+    totalTax = totalTax.toFixed(2)
+    let totalInclTax = Number(totalsExclTax) + Number(totalTax);
+    totalInclTax = Number(totalInclTax).toFixed(2)
+
 
     return {
         totalProductsExclTax,

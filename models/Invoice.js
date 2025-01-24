@@ -67,6 +67,10 @@ const InvoiceSchema = new mongoose.Schema({
     carrierName: { // Nom du transporteur
         type: String,
     },
+    remise: {
+        type: Number,
+        default: 0,
+    },
     shippingFees: { 
         type: Number,
         default: 0,

@@ -73,7 +73,7 @@ export const validateInvoiceData = (data) => {
 
 
 
-export const calculateInvoiceTotals = (products, shippingFees=0,taxRateOne, taxRateTwo) => {
+export const calculateInvoiceTotals = (products, shippingFees=0,taxRateOne, taxRateTwo, remise=0) => {
     let totalProductsExclTax = 0;
     let totalTax = 0;
 
@@ -86,12 +86,11 @@ export const calculateInvoiceTotals = (products, shippingFees=0,taxRateOne, taxR
     });
     
     totalProductsExclTax = totalProductsExclTax.toFixed(2)
-    const totalsExclTax = (Number(totalProductsExclTax) + Number(shippingFees)).toFixed(2)
+    const totalsExclTax = ((Number(totalProductsExclTax) + Number(shippingFees)) - Number(remise)).toFixed(2)
     totalTax = (totalsExclTax * (taxRateOne/100)) + (totalsExclTax * (taxRateTwo/100))
     totalTax = totalTax.toFixed(2)
     let totalInclTax = Number(totalsExclTax) + Number(totalTax);
     totalInclTax = Number(totalInclTax).toFixed(2)
-
 
     return {
         totalProductsExclTax,

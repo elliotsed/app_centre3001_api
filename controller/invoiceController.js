@@ -5,7 +5,7 @@ import { errorResponse, successResponse, validateInvoiceData, calculateInvoiceTo
 const createInvoice = async (req, res) => {
     let {
         orderRef, orderDate,
-        products, carrierName, shippingFees, paymentMethod, deliveryAddress, billingAddress, taxRateOne, taxRateTwo, remise
+        products, carrierName, shippingFees, paymentMethod, deliveryAddress, billingAddress, taxRateOne, taxRateTwo, discount
     } = req.body;
 
     // Validate input
@@ -16,7 +16,7 @@ const createInvoice = async (req, res) => {
 
     try {
 
-        const { totalProductsExclTax, totalTax, totalInclTax, totalsExclTax, productsFinal } = calculateInvoiceTotals(products, shippingFees, taxRateOne, taxRateTwo,remise);
+        const { totalProductsExclTax, totalTax, totalInclTax, totalsExclTax, productsFinal } = calculateInvoiceTotals(products, shippingFees, taxRateOne, taxRateTwo, discount);
 
         products = productsFinal
         console.log("vocii")
@@ -32,7 +32,7 @@ const createInvoice = async (req, res) => {
             totalProductsExclTax,
             totalTax,
             taxRateOne,
-            remise,
+            discount,
             taxRateTwo,
             totalsExclTax,
             totalInclTax,
@@ -84,7 +84,7 @@ const updateInvoice = async (req, res) => {
     }
     let {
         orderRef, orderDate,
-        products, carrierName, shippingFees, paymentMethod, deliveryAddress, billingAddress, taxRateOne, taxRateTwo, remise
+        products, carrierName, shippingFees, paymentMethod, deliveryAddress, billingAddress, taxRateOne, taxRateTwo, discount
     } = req.body;
 
     const validationError = validateInvoiceData(req.body);
@@ -93,7 +93,7 @@ const updateInvoice = async (req, res) => {
         return errorResponse(res, validationError, 400);
     }
 
-    const { totalProductsExclTax, totalTax, totalInclTax, totalsExclTax, productsFinal } = calculateInvoiceTotals(products, shippingFees, taxRateOne, taxRateTwo,remise);
+    const { totalProductsExclTax, totalTax, totalInclTax, totalsExclTax, productsFinal } = calculateInvoiceTotals(products, shippingFees, taxRateOne, taxRateTwo, discount);
 
     products = productsFinal
 
@@ -111,7 +111,7 @@ const updateInvoice = async (req, res) => {
             totalTax,
             taxRateOne,
             taxRateTwo,
-            remise,
+            discount,
             totalsExclTax,
             totalInclTax,
             createdBy: req.user._id,

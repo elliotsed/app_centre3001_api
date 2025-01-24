@@ -36,7 +36,7 @@ router.delete("/contact/:id", VerifyUser, deleteContact)
 // Invoices Routes 
 router.get("/invoices", VerifyUser, getInvoices)
 router.get("/invoices/:id", VerifyUser, getInvoice)
-router.post("/invoices", createInvoice)
+router.post("/invoices", VerifyUser, createInvoice)
 router.put("/invoices/:id", VerifyUser, updateInvoice)
 router.delete("/invoices/:id", VerifyUser, deleteInvoice)
 

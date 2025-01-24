@@ -67,7 +67,7 @@ const InvoiceSchema = new mongoose.Schema({
     carrierName: { // Nom du transporteur
         type: String,
     },
-    remise: {
+    discount: {
         type: Number,
         default: 0,
     },

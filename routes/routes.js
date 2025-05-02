@@ -6,6 +6,7 @@ import { createContact, getContacts, getContact, updateContact, deleteContact } 
 import { getInvoices, getInvoice, deleteInvoice, updateInvoice, createInvoice } from '../controller/invoiceController.js';
 import { createClient, getClients, getClient, updateClient, deleteClient } from '../controller/clientController.js';
 import { createConsultation, getConsultations, getConsultation, updateConsultation, deleteConsultation } from '../controller/consultationController.js';
+import { createSale, getSales } from '../controller/saleController.js'; // À créer
 
 const router = express.Router();
 
@@ -58,5 +59,22 @@ router.get('/consultations/:clientId', VerifyUser, getConsultations);
 router.get('/consultation/:id', VerifyUser, getConsultation);
 router.put('/update-consultation/:id', VerifyUser, updateConsultation);
 router.delete('/consultation/:id', VerifyUser, deleteConsultation);
+
+// Sales routes
+router.post(
+  '/sales',
+  [
+    body('date').trim().notEmpty().withMessage('La date est requise').isISO8601().withMessage('La date doit être au format ISO'),
+    body('invoiceNumber').trim().notEmpty().withMessage('Le numéro de facture est requis'),
+    body('firstName').trim().notEmpty().withMessage('Le prénom est requis'),
+    body('lastName').trim().notEmpty().withMessage('Le nom est requis'),
+    body('referenceNumber').trim().notEmpty().withMessage('Le numéro de référence est requis'),
+    body('productName').trim().notEmpty().withMessage('Le nom du produit est requis'),
+    body('lotNumber').trim().notEmpty().withMessage('Le numéro de lot est requis'),
+  ],
+  VerifyUser,
+  createSale
+);
+router.get('/sales', VerifyUser, getSales);
 
 export { router as Router };

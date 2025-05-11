@@ -76,5 +76,7 @@ router.post(
   createSale
 );
 router.get('/sales', VerifyUser, getSales);
+router.delete('/sales/:id', VerifyUser, deleteSale);
+
 
 export { router as Router };

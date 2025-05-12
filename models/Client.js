@@ -1,10 +1,28 @@
 import mongoose from 'mongoose';
 
 const ClientSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  address: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
+firstName: {
+    type: String,
+    required: true,
+  },
+  lastName: {
+    type: String,
+    required: true,
+  },
+  clientNumber: {
+    type: String,
+    required: true,
+    unique: true,
+  },  address: { type: String, required: true },
   phone: { type: String },
+  municipality: {
+    type: String,
+    required: true,
+  },
+  postalCode: {
+    type: String,
+    required: true,
+  },
   consultations: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Consultation' }],
   createdAt: { type: Date, default: Date.now },
 });

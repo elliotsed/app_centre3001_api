@@ -8,11 +8,12 @@ const ConsultationSchema = new mongoose.Schema({
   pacemaker: { type: Boolean, default: false },
   bloodPressure: { type: String, default: 'Normale' },
   covidOrVirus: { type: String, default: 'Aucun' },
+  other: { type: String },
   painAreas: [{
     bodyPart: { type: String, required: true }, // Ex: "Épaule gauche"
-    direction: { type: String }, // Ex: "Vers le bras"
     intensity: { type: Number, min: 0, max: 100 }, // % douleur actuelle
     maxIntensity: { type: Number, min: 0, max: 100 }, // % douleur max
+   side: { type: String }, // Ex: "Aiguë", "Chronique"
   }],
   scars: [{
     bodyPart: { type: String, required: true }, // Ex: "Genou droit"

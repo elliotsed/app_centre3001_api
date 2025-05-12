@@ -1,14 +1,21 @@
 import Client from '../models/Client.js';
 import Consultation from "../models/Consultation.js"; ;
 
+// Générer un numéro de client unique
+const generateClientNumber = async () => {
+  const count = await Client.countDocuments();
+  return `CL${(count + 1).toString().padStart(6, '0')}`; // Ex: CL000001
+};
+
 // Créer un client
 export const createClient = async (req, res) => {
   try {
-    const { name, address, email, phone } = req.body;
-    const client = new Client({ name, address, email, phone });
+    const clientNumber = await generateClientNumber();
+    const client = new Client({ ...req.body, clientNumber });
     await client.save();
     res.status(201).json(client);
   } catch (error) {
+    console.error('Error in createClient:', error);
     res.status(400).json({ message: 'Erreur lors de la création du client', error });
   }
 };

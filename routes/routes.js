@@ -6,7 +6,7 @@ import { createContact, getContacts, getContact, updateContact, deleteContact } 
 import { getInvoices, getInvoice, deleteInvoice, updateInvoice, createInvoice } from '../controller/invoiceController.js';
 import { createClient, getClients, getClient, updateClient, deleteClient } from '../controller/clientController.js';
 import { createConsultation, getConsultations, getConsultation, updateConsultation, deleteConsultation } from '../controller/consultationController.js';
-import { createSale, getSales,deleteSale } from '../controller/saleController.js'; // À créer
+import { createSale, getSales, getSale, updateSale, deleteSale } from '../controller/saleController.js';
 
 const router = express.Router();
 
@@ -76,7 +76,8 @@ router.post(
   createSale
 );
 router.get('/sales', VerifyUser, getSales);
+router.get('/sales/:id', VerifyUser, getSale);
+router.put('/sales/:id', VerifyUser, updateSale);
 router.delete('/sales/:id', VerifyUser, deleteSale);
-
 
 export { router as Router };

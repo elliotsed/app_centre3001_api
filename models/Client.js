@@ -19,6 +19,10 @@ firstName: {
     type: String,
     required: true,
   },
+   remarque: {
+    type: String,
+    required: true,
+  },
   postalCode: {
     type: String,
     required: true,

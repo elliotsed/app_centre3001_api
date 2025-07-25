@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const ContactSchema = new mongoose.Schema({
     contactType: {
         type: String,
-        enum: ['private', 'business', 'client'],
+        enum: ['Private', 'business', 'client','Client thérapeutique','Client boutique'],
         required: true
     },
     last_name: {
